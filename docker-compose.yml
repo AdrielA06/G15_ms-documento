@@ -1,0 +1,22 @@
+
+services:
+  backend:
+    image: juanku21:v1.0.0
+    networks:
+      - mired
+    volumes:
+      - /app/dist
+      - /app/node_modules
+      - /app/prisma
+    env_file: [".env"]
+
+    labels:
+          - "traefik.enable=true"
+          - "traefik.http.routers.backend.rule=Host(`backend.universidad.localhost`)"
+          - "traefik.http.routers.backend.tls=true"
+          - "traefik.http.services.backend.loadbalancer.server.port=3000"
+          - "traefik.docker.network=mired"
+
+networks:
+    mired:
+        external: true
