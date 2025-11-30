@@ -1,0 +1,8 @@
+ALONSO->  crear repo, armar estructura, separar la lógica de las rutas (endpoints) de la lógica de negocio (generadores).
+BETTIOL->completar init en test, crear dos o tres test, investigar y colocar redis,  Redis. Cambio de paradigma: En lugar de que DOC llame a otros servicios, debería escuchar un evento.
+MARTINEZ->Armar documento de listas y conexión, generador de documentación, crear archivo requirements.txt, Redis. Cambio de paradigma: En lugar de que DOC llame a otros servicios, debería escuchar un evento.
+SANCHEZ->Eliminar comentarios innecesarios, Crear un manejador global de excepciones (ej. si falta un dato del alumno, devolver 400 Bad Request), orquestador.
+RUIZ->Reestructuración de microservicio, archivo docker.
+VELAZCO-> Completar archivos de la carpeta models.
+VULCANO-> Crear test de conexión entre microservicios, Separar la lógica de las rutas (endpoints) de la lógica de negocio (generadores)
+
