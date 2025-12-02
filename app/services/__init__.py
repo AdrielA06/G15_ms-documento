@@ -1,4 +1,8 @@
-from .certificate_service import CertificateService
-from app.services.documentos_office_service import obtener_tipo_documento
-from app.services.alumno_service import AlumnoService
-from .controlador_service import CertificadoController
+from app.services.alumno_service import (
+    AlumnoService, 
+    ServiceConnectionError, 
+    AlumnoNotFoundError
+)
+from app.services.documentos_office_service import DocumentService
+
+__all__ = ["AlumnoService", "ServiceConnectionError", "AlumnoNotFoundError", "DocumentService"]
