@@ -30,3 +30,17 @@ log:
 accessLog:
   filePath: "/var/log/traefik/access.log"
   bufferingSize: 100
+
+metrics:
+  prometheus:
+    addEntryPointsLabels: true
+    addRoutersLabels: true
+    addServicesLabels: true
+    buckets:
+      - 0.1
+      - 0.3
+      - 1.2
+      - 5.0
+
+ping:
+  entryPoint: websecure
