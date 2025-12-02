@@ -1,23 +1,30 @@
 services:
-  redis:
+  
+  redis-service:
     image: redis:8.2-alpine
-    container_name: redis
+    container_name: redis_cola
     restart: always
+    command: redis-server /usr/local/etc/redis/redis.conf --loglevel notice --requirepass ${REDIS_PASSWORD}
     volumes:
-      - ./data:/data
-      - ./data/redis.conf:/data/redis.conf
-    command: redis-server /data/redis.conf --loglevel notice --requirepass ${REDIS_PASSWORD}
+      
+      - redis_data:/data
+     
+      - ./data/redis.conf:/usr/local/etc/redis/redis.conf
+      
     networks:
       mired:
         aliases:
           - redis.universidad.localhost
+          
+          - redis-service
+
     labels:
       - "traefik.enable=true"
-      - "traefik.tcp.routers.redis.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.redis.rule=HostSNI(*)"
       - "traefik.tcp.routers.redis.entryPoints=redis"
       - "traefik.tcp.routers.redis.service=redis"
       - "traefik.tcp.services.redis.loadbalancer.server.port=6379"
 
-networks:
-    mired:
-      external: true
+
+volumes:
+  redis_data:
