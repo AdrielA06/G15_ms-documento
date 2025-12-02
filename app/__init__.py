@@ -5,12 +5,7 @@ from app.config import config
 
 
 def create_app() -> Flask:
-    """
-    Using an Application Factory
-    Ref: Book Flask Web Development Page 78
-    """
     app_context = os.getenv('FLASK_CONTEXT')
-    # https://flask.palletsprojects.com/en/stable/api/#flask.Flask
     app = Flask(__name__)
     f = config.factory(app_context if app_context else 'development')
     app.config.from_object(f)

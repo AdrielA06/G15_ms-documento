@@ -49,7 +49,6 @@ class CertificateService:
     
     @staticmethod
     def _buscar_alumno_por_id(id: int) -> Alumno:
-        #TODO: Obtener url de variable de entorno
         URL_ALUMNOS = 'http://alumno-service/api/v1/alumnos'
         alumno_mapping = AlumnoMapping()
         r = requests.get(f'{URL_ALUMNOS}/{id}')

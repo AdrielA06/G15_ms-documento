@@ -1,4 +1,3 @@
-
 from app.services.certificate_service import CertificateService
 
 class AlumnoService:

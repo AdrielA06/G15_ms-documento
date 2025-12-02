@@ -13,15 +13,13 @@ class Document(ABC):
     @staticmethod
     @abstractmethod
     def generar(carpeta: str, plantilla: str, context: dict) -> BytesIO:
-        """Generar un documento y devolver un BytesIO"""
+
         pass
 
 
 class PDFDocument(Document):
     @staticmethod
-    # pyrefly: ignore  # bad-override
     def generar(carpeta: str, plantilla: str, context: dict) -> BytesIO:
-        # Construir base_url file:/// para que WeasyPrint pueda abrir archivos locales
         base_path = current_app.root_path.replace('\\', '/')
         base_url = f"file:///{base_path}"
 
@@ -36,14 +34,10 @@ class PDFDocument(Document):
 
 class ODTDocument(Document):
     @staticmethod
-    # pyrefly: ignore  # bad-override
     def generar(carpeta: str, plantilla: str, context: dict) -> BytesIO:
-        """Genera un ODT usando python-odt-template. Busca plantillas en current_app.template_folder.
-        Usa current_app.static_folder como media_path para que las imágenes en static sean accesibles."""
         templates_root = os.path.join(current_app.root_path, current_app.template_folder)
         path_template = os.path.join(templates_root, carpeta, f"{plantilla}.odt")
 
-        # media path para que el renderer encuentre imágenes dentro de static
         media_path = current_app.static_folder
         odt_renderer = get_odt_renderer(media_path=media_path)
 
@@ -65,10 +59,7 @@ class ODTDocument(Document):
 
 class DOCXDocument(Document):
     @staticmethod
-    # pyrefly: ignore  # bad-override
     def generar(carpeta: str, plantilla: str, context: dict) -> BytesIO:
-        """Genera un DOCX usando docxtpl. Busca plantillas en current_app.template_folder.
-        Pone en el contexto url_base file:/// para que plantillas puedan resolver imágenes locales si es necesario."""
         templates_root = os.path.join(current_app.root_path, current_app.template_folder)
         path_template = os.path.join(templates_root, carpeta, f"{plantilla}.docx")
 
