@@ -9,6 +9,17 @@ load_dotenv(os.path.join(basedir, '.env'))
 class Config(object):
     TESTING = False
 
+    # --- CONFIGURACIÓN DE REDIS Y CELERY ---
+    REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
+    REDIS_PORT = os.environ.get('REDIS_PORT', '6379')
+    REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', '')
+
+    # 2. Armamos la URL 
+    _REDIS_URL = f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/0"
+
+    CELERY_BROKER_URL = _REDIS_URL
+    CELERY_RESULT_BACKEND = _REDIS_URL
+
     @staticmethod
     def init_app(app):
         pass
