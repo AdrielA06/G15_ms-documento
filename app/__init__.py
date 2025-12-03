@@ -1,35 +1,53 @@
 import logging
 import os
 from flask import Flask, jsonify, request
-from celery import Celery  
+from celery import Celery  # Import necesario para la cola de tareas
 from app.config import config
 from .exceptions import AppError, ValidationError, NotFoundError, ServiceError
 
+# --- INSTANCIA GLOBAL DE CELERY ---
+# Se define fuera de create_app para que pueda ser importada por tasks.py
 celery = Celery(__name__)
 
 def create_app() -> Flask:
+    """
+    Application Factory para inicializar Flask y sus extensiones.
+    """
     app_context = os.getenv('FLASK_CONTEXT')
     
+    # Inicialización de Flask
     app = Flask(__name__, template_folder='template', static_folder='static')
 
+    # Carga de configuración (Development, Production, etc.)
     f = config.factory(app_context if app_context else 'development')
     app.config.from_object(f)
 
-    # Configuramos Celery 
+    # --- CONFIGURACIÓN DE CELERY ---
+    # Actualizamos la configuración de Celery con las variables de Flask (REDIS_URL, etc.)
     celery.conf.update(app.config)
 
+    # ContextTask: Permite que las tareas de Celery accedan al contexto de la aplicación
+    # (necesario para bases de datos, logs o renderizado de templates dentro de tareas)
     class ContextTask(celery.Task):
         def __call__(self, *args, **kwargs):
             with app.app_context():
                 return self.run(*args, **kwargs)
 
     celery.Task = ContextTask
+    # --------------------------------
 
+    # Registro de Blueprints
     from app.resources import home, certificado_bp
+    
+    # Rutas base
     app.register_blueprint(home, url_prefix='/api/v1')
-    app.register_blueprint(certificado_bp, url_prefix='/api/v1')
+    
+    # Rutas de documentos
+    # CAMBIO IMPORTANTE: Usamos '/api/v1/documentos' como prefijo.
+    # Tus rutas finales serán: /api/v1/documentos/solicitar, /api/v1/documentos/status/<id>, etc.
+    app.register_blueprint(certificado_bp, url_prefix='/api/v1/documentos')
 
-    # MANEJADORES DE ERRORES
+    # Registro de Manejadores de Errores
     register_errorhandlers(app)
 
     @app.shell_context_processor
@@ -38,6 +56,8 @@ def create_app() -> Flask:
 
     return app
 
+
+# --- MANEJADORES DE ERRORES ---
 
 def register_errorhandlers(app):
     @app.errorhandler(AppError)
@@ -60,7 +80,12 @@ def register_errorhandlers(app):
         body = {"error": "InternalServerError", "message": "Ha ocurrido un error inesperado."}
         return jsonify(body), 500
 
+# --- UTILIDADES ---
+
 def validar_payload(payload):
+    """
+    Valida que el payload contenga los campos obligatorios.
+    """
     faltantes = [f for f in ("nombre","apellidos","dni") if not payload.get(f)]
     if faltantes:
         raise ValidationError("Faltan campos obligatorios", payload={"missing": faltantes})
