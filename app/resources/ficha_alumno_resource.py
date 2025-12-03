@@ -51,16 +51,12 @@ class FichaAlumnoResource(Resource):
             return {"error": f"Error interno: {str(e)}"}, 500
 
 
-class FormatosResource(Resource):
-    """Resource para obtener formatos disponibles."""
-    
+class FormatosResource(Resource):    
     def get(self):
-        """Retorna los formatos disponibles."""
         return {
             "formatos": DocumentService.formatos_disponibles(),
             "default": "pdf"
         }
-
 
 api.add_resource(FichaAlumnoResource, "/ficha/<int:legajo>")
 api.add_resource(FormatosResource, "/formatos")

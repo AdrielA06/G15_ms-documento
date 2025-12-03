@@ -4,11 +4,6 @@ from app.mapping.especialidad_mapping import EspecialidadMapping
 
 
 class AlumnoMapping:
-    """
-    Clase para mapear datos JSON a objetos Alumno.
-    Maneja dinámicamente los campos que vengan del servicio externo.
-    """
-    
     CAMPOS_CONOCIDOS = [
         "id", "apellido", "nombre", "nro_documento", 
         "tipo_documento_id", "fecha_nacimiento", "sexo",
@@ -19,16 +14,6 @@ class AlumnoMapping:
     
     @staticmethod
     def from_json(data: dict) -> Alumno:
-        """
-        Convierte datos JSON a un objeto Alumno.
-        Mapea campos conocidos y guarda los desconocidos en datos_extra.
-        
-        Args:
-            data: Diccionario con datos del alumno desde el servicio externo
-            
-        Returns:
-            Instancia de Alumno
-        """
         if not data:
             return Alumno()
         
@@ -42,7 +27,6 @@ class AlumnoMapping:
         if tipo_doc_data:
             alumno.tipo_documento = TipoDocumentoMapping.from_json(tipo_doc_data)
         
-        # Mapear especialidad si existe
         especialidad_data = data.get("especialidad")
         if especialidad_data:
             alumno.especialidad = EspecialidadMapping.from_json(especialidad_data)
@@ -59,7 +43,6 @@ class AlumnoMapping:
     
     @staticmethod
     def from_json_list(data_list: list) -> list:
-        """Convierte una lista JSON a lista de Alumnos."""
         if not data_list:
             return []
         return [AlumnoMapping.from_json(item) for item in data_list]
