@@ -7,7 +7,7 @@ python-odt-template==0.5.1
 requests==2.32.5
 weasyprint==65.1
 pdfkit==1.0.0
-python-docx==0.8.11
+python-docx==1.1.1
 odfpy==1.4.1
 celery==5.3.6
 redis==5.0.1
