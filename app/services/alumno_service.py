@@ -1,7 +1,7 @@
 import requests
 from app.config.config import Config
 from app.models.alumno import Alumno
-from app.mapping.alumno_mapping import AlumnoMapping
+from app.mapping.alumno_mapping import map_to_alumno
 from app.exceptions import ServiceError, NotFoundError
 
 class ServiceConnectionError(Exception):
@@ -42,11 +42,11 @@ class AlumnoService:
     
     def obtener_alumno_por_legajo(self, legajo: int) -> Alumno:
         data = self._hacer_request(f"/api/v1/alumnos/legajo/{legajo}")
-        return AlumnoMapping.from_json(data)
+        return map_to_alumno(data)
     
     def obtener_alumno_por_id(self, alumno_id: int) -> Alumno:
         data = self._hacer_request(f"/api/v1/alumnos/{alumno_id}")
-        return AlumnoMapping.from_json(data)
+        return map_to_alumno(data)
     
     def get_by_id(self, alumno_id: int) -> Alumno:
         try:
@@ -58,6 +58,6 @@ class AlumnoService:
     
     def obtener_todos_alumnos(self) -> list:
         data = self._hacer_request("/api/v1/alumnos")
-        return AlumnoMapping.from_json_list(data)
+        return [map_to_alumno(item) for item in data]
 
 alumno_service = AlumnoService()

@@ -1,5 +1,5 @@
 from app.exceptions import ServiceError, NotFoundError
-from app.services.documento_service import documento_service
+from app.services.documentos_office_service import documento_service
 
 class CertificadoController:
     @staticmethod

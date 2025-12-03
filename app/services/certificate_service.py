@@ -3,7 +3,7 @@ import requests
 from io import BytesIO
 from app.mapping import AlumnoMapping
 from app.models import Alumno
-from app.services import obtener_tipo_documento
+from app.services.documentos_office_service import obtener_tipo_documento
 
 class CertificateService:
     @staticmethod
@@ -57,4 +57,6 @@ class CertificateService:
         else:
             raise Exception(f'Error al obtener el alumno con id {id}: {r.status_code}')
         return result
-    
+
+
+certificate_service = CertificateService()

@@ -8,6 +8,38 @@ from python_odt_template.jinja import get_odt_renderer
 from docxtpl import DocxTemplate
 import jinja2
 
+class DocumentService:
+    FORMATOS = {
+        'pdf': ('application/pdf', 'pdf'),
+        'docx': ('application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'docx'),
+        'odt': ('application/vnd.oasis.opendocument.text', 'odt'),
+    }
+    
+    @staticmethod
+    def formatos_disponibles():
+        return list(DocumentService.FORMATOS.keys())
+    
+    def generar_ficha_alumno(self, alumno: dict, format: str = "pdf"):
+        documento_class = obtener_tipo_documento(format)
+        if not documento_class:
+            raise ValueError(f"Formato no soportado: {format}")
+        
+        context = {
+            "legajo": alumno.get("legajo"),
+            "nombre_completo": alumno.get("nombre_completo"),
+            "numero_documento": alumno.get("numero_documento"),
+            "especialidad": alumno.get("especialidad"),
+            "anio_cursado": alumno.get("anio_cursado"),
+        }
+        
+        content_io = documento_class.generar(
+            carpeta="fichas",
+            plantilla="ficha_alumno",
+            context=context
+        )
+        
+        content_type, extension = self.FORMATOS[format]
+        return content_io.getvalue(), content_type, extension
 
 class Document(ABC):
     @staticmethod
@@ -92,3 +124,6 @@ def obtener_tipo_documento(tipo: str) -> Document:
         'docx': DOCXDocument,
     }
     return tipos.get(tipo)
+
+# Instancia singleton del servicio de documentos
+documento_service = DocumentService()

@@ -1,15 +1,18 @@
-from marshmallow import fields, Schema, post_load, validate
-from app.models import Especialidad
-class EspecialidadMapping(Schema):
-    id = fields.Integer()
-    nombre = fields.String(required=True, validate=validate.Length(min=1, max=100))
-    letra = fields.String(required=True, validate=validate.Length(equal=1))
-    observacion = fields.String(validate=validate.Length(max=255), allow_none=True)
+from app.models.especialidad import Especialidad
 
-    tipoespecialidad = fields.Integer(required=True)
 
-    facultad = fields.String(required=True)
-
-    @post_load
-    def nueva_especialidad(self, data, **kwargs):
-        return Especialidad(**data)
+def map_to_especialidad(data) -> Especialidad:
+    especialidad = Especialidad()
+    
+    especialidad.id = data.get("id", 0)
+    especialidad.codigo = data.get("codigo", "")
+    especialidad.nombre = data.get("nombre", "")
+    especialidad.titulo = data.get("titulo", "")
+    especialidad.duracion_anios = data.get("duracion_anios", 0)
+    especialidad.plan_estudio = data.get("plan_estudio", "")
+    especialidad.descripcion = data.get("descripcion", "")
+    
+    if "datos_extra" in data:
+        especialidad.datos_extra = data["datos_extra"]
+    
+    return especialidad

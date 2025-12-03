@@ -1,48 +1,64 @@
 from app.models.alumno import Alumno
-from app.mapping.tipodocumento_mapping import TipoDocumentoMapping
-from app.mapping.especialidad_mapping import EspecialidadMapping
+from app.models.tipodocumento import TipoDocumento
+from app.models.especialidad import Especialidad
+
+def map_to_alumno(data) -> Alumno:
+    alumno = Alumno()
+    
+    alumno.id = data.get("id", 0)
+    alumno.apellido = data.get("apellido", "")
+    alumno.nombre = data.get("nombre", "")
+    alumno.nro_documento = data.get("nro_documento", "")
+    alumno.tipo_documento_id = data.get("tipo_documento_id", 0)
+    alumno.fecha_nacimiento = data.get("fecha_nacimiento", "")
+    alumno.sexo = data.get("sexo", "")
+    alumno.nro_legajo = data.get("nro_legajo", 0)
+    alumno.fecha_ingreso = data.get("fecha_ingreso", "")
+    
+    if "tipo_documento" in data and data["tipo_documento"]:
+        alumno.tipo_documento = map_to_tipo_documento(data["tipo_documento"])
+    
+    if "especialidad" in data and data["especialidad"]:
+        alumno.especialidad = map_to_especialidad(data["especialidad"])
+    
+    if "datos_extra" in data:
+        alumno.datos_extra = data["datos_extra"]
+    
+    return alumno
+
+def map_to_tipo_documento(data) -> TipoDocumento:
+    tipo = TipoDocumento()
+    
+    tipo.id = data.get("id", 0)
+    tipo.sigla = data.get("sigla", "")
+    tipo.nombre = data.get("nombre", "")
+    tipo.descripcion = data.get("descripcion", "")
+    
+    if "datos_extra" in data:
+        tipo.datos_extra = data["datos_extra"]
+    
+    return tipo
+
+def map_to_especialidad(data) -> Especialidad:
+    especialidad = Especialidad()
+    
+    especialidad.id = data.get("id", 0)
+    especialidad.codigo = data.get("codigo", "")
+    especialidad.nombre = data.get("nombre", "")
+    especialidad.titulo = data.get("titulo", "")
+    especialidad.duracion_anios = data.get("duracion_anios", 0)
+    especialidad.plan_estudio = data.get("plan_estudio", "")
+    especialidad.descripcion = data.get("descripcion", "")
+    
+    if "datos_extra" in data:
+        especialidad.datos_extra = data["datos_extra"]
+    
+    return especialidad
 
 
 class AlumnoMapping:
-    CAMPOS_CONOCIDOS = [
-        "id", "apellido", "nombre", "nro_documento", 
-        "tipo_documento_id", "fecha_nacimiento", "sexo",
-        "nro_legajo", "fecha_ingreso"
-    ]
-
-    CAMPOS_ANIDADOS = ["tipo_documento", "especialidad"]
+    """Clase wrapper para mapear datos de alumno."""
     
-    @staticmethod
-    def from_json(data: dict) -> Alumno:
-        if not data:
-            return Alumno()
-        
-        alumno = Alumno()
-
-        for campo in AlumnoMapping.CAMPOS_CONOCIDOS:
-            if campo in data:
-                setattr(alumno, campo, data[campo])
-
-        tipo_doc_data = data.get("tipo_documento")
-        if tipo_doc_data:
-            alumno.tipo_documento = TipoDocumentoMapping.from_json(tipo_doc_data)
-        
-        especialidad_data = data.get("especialidad")
-        if especialidad_data:
-            alumno.especialidad = EspecialidadMapping.from_json(especialidad_data)
-
-        campos_procesados = (
-            AlumnoMapping.CAMPOS_CONOCIDOS + 
-            AlumnoMapping.CAMPOS_ANIDADOS
-        )
-        for key, value in data.items():
-            if key not in campos_procesados:
-                alumno.datos_extra[key] = value
-        
-        return alumno
-    
-    @staticmethod
-    def from_json_list(data_list: list) -> list:
-        if not data_list:
-            return []
-        return [AlumnoMapping.from_json(item) for item in data_list]
+    def load(self, data) -> Alumno:
+        """Mapea un diccionario a un objeto Alumno."""
+        return map_to_alumno(data)
