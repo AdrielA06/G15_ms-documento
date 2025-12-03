@@ -20,6 +20,8 @@ class Config(object):
     CELERY_BROKER_URL = _REDIS_URL
     CELERY_RESULT_BACKEND = _REDIS_URL
 
+    ALUMNOS_HOST = "http://localhost:5000"
+
     @staticmethod
     def init_app(app):
         pass

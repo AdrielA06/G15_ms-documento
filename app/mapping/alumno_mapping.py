@@ -54,3 +54,11 @@ def map_to_especialidad(data) -> Especialidad:
         especialidad.datos_extra = data["datos_extra"]
     
     return especialidad
+
+
+class AlumnoMapping:
+    """Clase wrapper para mapear datos de alumno."""
+    
+    def load(self, data) -> Alumno:
+        """Mapea un diccionario a un objeto Alumno."""
+        return map_to_alumno(data)
