@@ -25,3 +25,7 @@ services:
             - "traefik.http.middlewares.documentos-service.retry.attempts=4"
             - "traefik.http.middlewares.documentos-service.retry.initialinterval=100ms"            
             - "traefik.docker.network=mired"
+
+networks:
+  mired:
+    external: true

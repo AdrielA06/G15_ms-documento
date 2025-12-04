@@ -27,3 +27,7 @@ services:
 
 volumes:
   redis_data:
+
+networks:
+  mired:
+    external: true
