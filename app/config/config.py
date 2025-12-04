@@ -6,6 +6,7 @@ load_dotenv()
 class Config:
    
     UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', '/app/generated')
+    ALUMNOS_HOST = os.getenv('ALUMNOS_HOST', 'http://alumno-service')
 
 class DevelopmentConfig(Config):
     

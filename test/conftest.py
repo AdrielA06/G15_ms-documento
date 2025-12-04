@@ -1,6 +1,7 @@
 import pytest
 import os
 import shutil
+import tempfile
 from app import create_app
 
 @pytest.fixture
@@ -10,17 +11,18 @@ def app():
     app = create_app()
     
     
-    app.config['UPLOAD_FOLDER'] = '/tmp/test_generated'
+    test_upload_dir = tempfile.mkdtemp(prefix='flask_test_')
+    app.config['UPLOAD_FOLDER'] = test_upload_dir
     
-   
-    if not os.path.exists(app.config['UPLOAD_FOLDER']):
-        os.makedirs(app.config['UPLOAD_FOLDER'])
+    
+    if not os.path.exists(test_upload_dir):
+        os.makedirs(test_upload_dir)
 
     yield app
 
-    
-    if os.path.exists(app.config['UPLOAD_FOLDER']):
-        shutil.rmtree(app.config['UPLOAD_FOLDER'])
+   
+    if os.path.exists(test_upload_dir):
+        shutil.rmtree(test_upload_dir)
 
 @pytest.fixture
 def client(app):

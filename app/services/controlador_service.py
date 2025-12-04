@@ -1,10 +1,13 @@
 from app.exceptions import ServiceError, NotFoundError
 from app.services.documentos_office_service import documento_service
+from app.services.certificate_service import certificate_service
+
 
 class CertificadoController:
     @staticmethod
     def obtener_certificado(id: int, tipo: str):
-        return documento_service.generar_certificado_alumno_regular(id, tipo)
+        
+        return certificate_service.generar_certificado_alumno_regular(id, tipo)
 
 class ControladorService:
     def __init__(self, doc_srv=None):
