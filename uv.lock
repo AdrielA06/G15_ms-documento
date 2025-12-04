@@ -279,45 +279,6 @@ wheels = [
 ]
 
 [[package]]
-name = "estructura-flask"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "docxtpl" },
-    { name = "flask" },
-    { name = "flask-restful" },
-    { name = "granian" },
-    { name = "marshmallow" },
-    { name = "pyrefly" },
-    { name = "python-dotenv" },
-    { name = "python-odt-template" },
-    { name = "requests" },
-    { name = "weasyprint" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "pytest" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "docxtpl", specifier = "==0.20.0" },
-    { name = "flask", specifier = "==3.1.2" },
-    { name = "flask-restful", specifier = ">=0.3.10" },
-    { name = "granian", specifier = ">=2.6.0" },
-    { name = "marshmallow", specifier = "==4.0.1" },
-    { name = "pyrefly", specifier = "==0.38.2" },
-    { name = "python-dotenv", specifier = "==1.1.1" },
-    { name = "python-odt-template", specifier = "==0.5.1" },
-    { name = "requests", specifier = "==2.32.5" },
-    { name = "weasyprint", specifier = "==65.1" },
-]
-
-[package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=9.0.1" }]
-
-[[package]]
 name = "flask"
 version = "3.1.2"
 source = { registry = "https://pypi.org/simple" }
@@ -648,6 +609,45 @@ sdist = { url = "https://files.pythonhosted.org/packages/cc/ff/8f092fe402ef12aa7
 wheels = [
     { url = "https://files.pythonhosted.org/packages/cc/18/297efc62b3539b9cd379fc49be3740a02e4c8a43e486f50322cfe0b9568a/marshmallow-4.0.1-py3-none-any.whl", hash = "sha256:72f14ef346f81269dbddee891bac547dda1501e9e08b6a809756ea3dbb7936a1", size = 48414, upload-time = "2025-08-28T15:01:35.221Z" },
 ]
+
+[[package]]
+name = "ms-documento"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "docxtpl" },
+    { name = "flask" },
+    { name = "flask-restful" },
+    { name = "granian" },
+    { name = "marshmallow" },
+    { name = "pyrefly" },
+    { name = "python-dotenv" },
+    { name = "python-odt-template" },
+    { name = "requests" },
+    { name = "weasyprint" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "docxtpl", specifier = "==0.20.0" },
+    { name = "flask", specifier = "==3.1.2" },
+    { name = "flask-restful", specifier = ">=0.3.10" },
+    { name = "granian", specifier = ">=2.6.0" },
+    { name = "marshmallow", specifier = "==4.0.1" },
+    { name = "pyrefly", specifier = "==0.38.2" },
+    { name = "python-dotenv", specifier = "==1.1.1" },
+    { name = "python-odt-template", specifier = "==0.5.1" },
+    { name = "requests", specifier = "==2.32.5" },
+    { name = "weasyprint", specifier = "==65.1" },
+]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=9.0.1" }]
 
 [[package]]
 name = "packaging"

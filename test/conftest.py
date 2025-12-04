@@ -7,12 +7,13 @@ from app import create_app
 @pytest.fixture
 def app():
     
-    os.environ['FLASK_ENV'] = 'testing'
+    os.environ['FLASK_CONTEXT'] = 'testing'
     app = create_app()
     
     
     test_upload_dir = tempfile.mkdtemp(prefix='flask_test_')
     app.config['UPLOAD_FOLDER'] = test_upload_dir
+    app.config['TESTING'] = True
     
     
     if not os.path.exists(test_upload_dir):

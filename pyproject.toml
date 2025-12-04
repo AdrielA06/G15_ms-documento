@@ -1,7 +1,7 @@
 [project]
-name = "estructura-flask"
+name = "ms-documento"
 version = "0.1.0"
-description = "Add your description here"
+description = "Microservicio para generación de documentos - Grupo 15"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
