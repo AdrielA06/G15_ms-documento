@@ -1,0 +1,16 @@
+services:
+  k6:
+    image: grafana/k6:latest
+    container_name: k6-load-test
+    volumes:
+      - ./k6/scripts:/scripts
+      - ./k6/results:/results
+    environment:
+      - BASE_URL=http://documentos-service:5000
+    networks:
+      - mired
+    command: run /scripts/documento-load-test.js --out json=/results/results.json
+
+networks:
+  mired:
+    external: true
