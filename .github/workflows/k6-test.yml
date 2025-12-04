@@ -1,0 +1,61 @@
+name: K6 Load Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Tipo de prueba'
+        required: true
+        default: 'smoke'
+        type: choice
+        options:
+          - smoke
+          - load
+          - stress
+
+jobs:
+  k6-tests:
+    runs-on: ubuntu-latest
+    
+    services:
+      documentos-service:
+        image: gestion-documentos:v1.0.0
+        ports:
+          - 5000:5000
+        env:
+          FLASK_CONTEXT: testing
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar K6
+        run: |
+          sudo gpg -k
+          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install k6
+
+      - name: Esperar servicio
+        run: |
+          timeout 60 bash -c 'until curl -s http://localhost:5000/ > /dev/null; do sleep 2; done'
+
+      - name: Ejecutar pruebas K6
+        run: |
+          k6 run \
+            --env BASE_URL=http://localhost:5000 \
+            --out json=k6/results/results.json \
+            k6/scripts/documento-load-test.js
+        env:
+          K6_TEST_TYPE: ${{ github.event.inputs.test_type || 'smoke' }}
+
+      - name: Subir resultados
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: k6-results
+          path: k6/results/
