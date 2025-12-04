@@ -1,0 +1,21 @@
+http:
+  routers:
+    # Router para API versión 1
+    api-v1-documentos:
+      rule: "Host(`documentos.universidad.localhost`) && PathPrefix(`/api/v1`)"
+      service: documentos-service
+      entryPoints:
+        - websecure
+      tls: {}
+      middlewares:
+        - rate-limit
+        - secure-headers
+
+  services:
+    # Health check para documentos
+    documentos-service:
+      loadBalancer:
+        healthCheck:
+          path: /api/v1/
+          interval: 10s
+          timeout: 3s

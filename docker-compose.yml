@@ -8,7 +8,6 @@ services:
                 aliases:
                     - documentos.universidad.localhost
         environment:
-           
             - REDIS_HOST=redis-service 
             - REDIS_PORT=6379
             - REDIS_PASSWORD=${REDIS_PASSWORD}
@@ -24,6 +23,7 @@ services:
             - "traefik.http.middlewares.documentos-service.circuitbreaker.expression=NetworkErrorRatio() > 0.5"
             - "traefik.http.middlewares.documentos-service.retry.attempts=4"
             - "traefik.http.middlewares.documentos-service.retry.initialinterval=100ms"            
+            - "traefik.http.routers.documentos-service.middlewares=cb-documentos@file,retry-policy@file,secure-headers@file,compress@file"
             - "traefik.docker.network=mired"
 
 networks:

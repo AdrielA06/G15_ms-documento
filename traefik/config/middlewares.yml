@@ -1,0 +1,36 @@
+http:
+  middlewares:
+    # Circuit Breaker para documentos
+    cb-documentos:
+      circuitBreaker:
+        expression: "ResponseCodeRatio(500, 600, 0, 600) > 0.25 || NetworkErrorRatio() > 0.5 || LatencyAtQuantileMS(50.0) > 100"
+
+    # Circuit Breaker para alumnos
+    cb-alumnos:
+      circuitBreaker:
+        expression: "ResponseCodeRatio(500, 600, 0, 600) > 0.25 || NetworkErrorRatio() > 0.5 || LatencyAtQuantileMS(50.0) > 100"
+
+    # Circuit Breaker para académica
+    cb-academica:
+      circuitBreaker:
+        expression: "ResponseCodeRatio(500, 600, 0, 600) > 0.25 || NetworkErrorRatio() > 0.5 || LatencyAtQuantileMS(50.0) > 100"
+
+    # Retry para todos los servicios
+    retry-policy:
+      retry:
+        attempts: 4
+        initialInterval: 100ms
+
+    # Compresión
+    compress:
+      compress:
+        excludedContentTypes:
+          - text/event-stream
+
+    # Autenticación básica para dashboard
+    auth-dashboard:
+      basicAuth:
+        users:
+          # usuario: admin, password: admin (cambiar en producción)
+          # Generar con: htpasswd -nb admin admin
+          - "admin:$apr1$H6uskkkW$IgXLP6ewTrSuBkTrqE8wj/"
