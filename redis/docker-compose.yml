@@ -4,7 +4,7 @@ services:
     image: redis:8.2-alpine
     container_name: redis_cola
     restart: always
-    command: redis-server /usr/local/etc/redis/redis.conf --loglevel notice --requirepass ${REDIS_PASSWORD}
+    command: redis-server /usr/local/etc/redis/redis.conf --loglevel notice
     volumes:
       
       - redis_data:/data

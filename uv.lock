@@ -279,8 +279,6 @@ wheels = [
 ]
 
 [[package]]
-<<<<<<< Updated upstream
-=======
 name = "estructura-flask"
 version = "0.1.0"
 source = { virtual = "." }
@@ -322,7 +320,6 @@ requires-dist = [
 dev = [{ name = "pytest", specifier = ">=9.0.1" }]
 
 [[package]]
->>>>>>> Stashed changes
 name = "flask"
 version = "3.1.2"
 source = { registry = "https://pypi.org/simple" }

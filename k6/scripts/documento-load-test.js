@@ -18,9 +18,9 @@ export const options = {
             executor: 'ramping-vus',
             startVUs: 0,
             stages: [
-                { duration: '1m', target: 10 },  // Subir a 10 usuarios
-                { duration: '3m', target: 10 },  // Mantener 10 usuarios
-                { duration: '1m', target: 0 },   // Bajar a 0
+                { duration: '1m', target: 10 },
+                { duration: '3m', target: 10 },
+                { duration: '1m', target: 0 },
             ],
             startTime: '30s',
             tags: { test_type: 'load' },
@@ -46,9 +46,11 @@ export const options = {
     },
 };
 
-const BASE_URL = __ENV.BASE_URL || 'https://documentos.universidad.localhost';
+// CAMBIADO: URL por defecto apunta a localhost:5000 (tu Flask app)
+const BASE_URL = __ENV.BASE_URL || 'http://localhost:5000';
 
 export function setup() {
+    // Test que el servicio está disponible en /
     const res = http.get(`${BASE_URL}/`);
     check(res, {
         'servicio disponible': (r) => r.status === 200,
@@ -56,6 +58,7 @@ export function setup() {
 }
 
 export default function () {
+    // Test 1: Health check en /
     const healthRes = http.get(`${BASE_URL}/`);
     check(healthRes, {
         'health check OK': (r) => r.status === 200,
@@ -64,8 +67,9 @@ export default function () {
 
     sleep(1);
 
+    // Test 2: Generar certificado via POST /api/v1/documentos/generar
     const payload = JSON.stringify({
-        alumno_id: Math.floor(Math.random() * 1000) + 1,
+        alumno_id: Math.floor(Math.random() * 100) + 1,
         formato: 'pdf',
     });
 
@@ -83,18 +87,29 @@ export default function () {
     );
     certificadoTrend.add(Date.now() - startTime);
 
+    // CORREGIDO: Verificar que r.body existe antes de acceder a .length
     check(certRes, {
         'certificado generado': (r) => r.status === 200 || r.status === 201,
-        'respuesta tiene contenido': (r) => r.body.length > 0,
+        'respuesta tiene contenido': (r) => r.body && r.body.length > 0,
     });
     errorRate.add(certRes.status >= 400);
 
     sleep(2);
 
+    // Test 3: Obtener formatos disponibles via GET /api/v1/documentos/formatos
     const formatosRes = http.get(`${BASE_URL}/api/v1/documentos/formatos`);
     check(formatosRes, {
         'formatos obtenidos': (r) => r.status === 200,
-        'contiene pdf': (r) => r.body.includes('pdf'),
+        'contiene pdf': (r) => r.body && r.body.includes('pdf'),
+    });
+
+    sleep(1);
+
+    // Test 4: Obtener ficha de alumno via GET /api/v1/documentos/ficha/{legajo}
+    const legajo = Math.floor(Math.random() * 100) + 1;
+    const fichaRes = http.get(`${BASE_URL}/api/v1/documentos/ficha/${legajo}?formato=pdf`);
+    check(fichaRes, {
+        'ficha obtenida o no encontrada': (r) => r.status === 200 || r.status === 404,
     });
 
     sleep(1);

@@ -1,19 +1,19 @@
 from flask import Blueprint, send_file
-from app.controllers.certificado_controller import CertificadoController
+from app.services.certificate_service import CertificateService
 
-certificado_bp = Blueprint('certificado', _name_)
+certificado_bp = Blueprint('certificado', __name__)
 
 @certificado_bp.route('/certificado/<int:id>/pdf', methods=['GET'])
 def certificado_en_pdf(id: int):
-    pdf_io = CertificadoController.obtener_certificado(id, 'pdf')
+    pdf_io = CertificateService.generar_certificado_alumno_regular(id, 'pdf')
     return send_file(pdf_io, mimetype='application/pdf', as_attachment=False)
 
 @certificado_bp.route('/certificado/<int:id>/odt', methods=['GET'])
 def certificado_en_odt(id: int):
-    odt_io = CertificadoController.obtener_certificado(id, 'odt')
+    odt_io = CertificateService.generar_certificado_alumno_regular(id, 'odt')
     return send_file(odt_io, mimetype='application/vnd.oasis.opendocument.text', as_attachment=True, download_name="certificado.odt")
 
 @certificado_bp.route('/certificado/<int:id>/docx', methods=['GET'])
 def certificado_en_docx(id: int):
-    docx_io = CertificadoController.obtener_certificado(id, 'docx')
+    docx_io = CertificateService.generar_certificado_alumno_regular(id, 'docx')
     return send_file(docx_io, mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document', as_attachment=True, download_name="certificado.docx")

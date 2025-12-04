@@ -1,5 +1,6 @@
 services:
     documentos-service:
+        build: .
         image: gestion-documentos:v1.0.0
         deploy:
             replicas: 2
