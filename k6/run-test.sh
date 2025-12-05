@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Colores para output
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -9,15 +9,15 @@ NC='\033[0m'
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 RESULTS_DIR="${SCRIPT_DIR}/results"
 
-# Crear directorio de resultados si no existe
+
 mkdir -p "${RESULTS_DIR}"
 
-# Timestamp para archivos
+
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 
 echo -e "${YELLOW}=== Iniciando pruebas de carga K6 ===${NC}"
 
-# Verificar si k6 está instalado localmente o usar Docker
+
 if command -v k6 &> /dev/null; then
     echo -e "${GREEN}Usando K6 local${NC}"
     K6_CMD="k6"
@@ -26,7 +26,7 @@ else
     K6_CMD="docker run --rm -i --network mired -v ${SCRIPT_DIR}/scripts:/scripts -v ${RESULTS_DIR}:/results grafana/k6"
 fi
 
-# Función para ejecutar prueba
+
 run_test() {
     local script=$1
     local output_file="${RESULTS_DIR}/${script%.js}_${TIMESTAMP}.json"
@@ -52,7 +52,7 @@ run_test() {
     fi
 }
 
-# Menú de opciones
+
 case "${1:-all}" in
     smoke)
         echo "Ejecutando prueba de humo..."
