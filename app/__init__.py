@@ -12,14 +12,12 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-
 def create_app():
     
     env = os.environ.get('FLASK_CONTEXT', os.environ.get('FLASK_ENV', 'development'))
 
     app = Flask(__name__)
     app.config.from_object(factory(env))
-
     
     app.register_blueprint(certificado_bp, url_prefix='/api/v1/documentos')
     app.register_blueprint(ficha_alumno_bp, url_prefix='/api/v1/documentos')

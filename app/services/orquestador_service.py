@@ -4,7 +4,6 @@ from typing import Any
 from ..exceptions import ValidationError, NotFoundError, ServiceError
 from . import alumno_service, controlador_service, documentos_office_service
 
-
 @dataclass
 class AlumnoInfo:
     nombre: str
@@ -12,13 +11,11 @@ class AlumnoInfo:
     dni: str
     foto: Any = None
 
-
 @dataclass
 class AcademicInfo:
     curso: str
     notas: Any
     fechas: Any
-
 
 @dataclass
 class CertificatePayload:
@@ -26,13 +23,11 @@ class CertificatePayload:
     academic: AcademicInfo
     opciones: Any = None
 
-
 @dataclass
 class CertificateResult:
     success: bool
     mensaje: str
     documento: Any = None
-
 
 class OrquestadorService:
     def __init__(self,

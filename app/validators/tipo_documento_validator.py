@@ -1,6 +1,5 @@
 from app.models.tipodocumento import TipoDocumento
 
-
 def validar_tipo_documento_completo(tipo_documento: TipoDocumento) -> tuple:
     errores = []
     

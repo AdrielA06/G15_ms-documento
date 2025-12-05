@@ -57,7 +57,6 @@ class Document(ABC):
     def generar(carpeta: str, plantilla: str, **kwargs) -> BytesIO:
         pass
 
-
 class PDFDocument(Document):
     @staticmethod
     def generar(carpeta: str, plantilla: str, **kwargs) -> BytesIO:
@@ -71,7 +70,6 @@ class PDFDocument(Document):
         bytes_data = HTML(string=html_string, base_url=base_url).write_pdf()
         pdf_io = BytesIO(bytes_data)
         return pdf_io
-
 
 class ODTDocument(Document):
     @staticmethod
@@ -96,7 +94,6 @@ class ODTDocument(Document):
         os.unlink(temp_path)
         odt_io.seek(0)
         return odt_io
-
 
 class DOCXDocument(Document):
     @staticmethod
@@ -124,7 +121,6 @@ class DOCXDocument(Document):
         os.unlink(temp_path)
         docx_io.seek(0)
         return docx_io
-
 
 def obtener_tipo_documento(tipo: str):
     if tipo.upper() == 'PDF':

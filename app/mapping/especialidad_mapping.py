@@ -1,6 +1,5 @@
 from app.models.especialidad import Especialidad
 
-
 def map_to_especialidad(data) -> Especialidad:
     especialidad = Especialidad()
     

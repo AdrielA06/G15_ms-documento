@@ -58,5 +58,4 @@ class CertificateService:
             raise Exception(f'Error al obtener el alumno con id {id}: {r.status_code}')
         return result
 
-
 certificate_service = CertificateService()

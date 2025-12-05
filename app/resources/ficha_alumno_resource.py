@@ -7,10 +7,8 @@ from app.services.alumno_service import (
     AlumnoNotFoundError
 )
 
-
 ficha_alumno_bp = Blueprint("ficha_alumno", __name__)
 api = Api(ficha_alumno_bp)
-
 
 class FichaAlumnoResource(Resource):
     def __init__(self):

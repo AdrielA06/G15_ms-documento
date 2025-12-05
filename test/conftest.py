@@ -10,7 +10,6 @@ def app():
     os.environ['FLASK_CONTEXT'] = 'testing'
     app = create_app()
     
-    
     test_upload_dir = tempfile.mkdtemp(prefix='flask_test_')
     app.config['UPLOAD_FOLDER'] = test_upload_dir
     app.config['TESTING'] = True
@@ -20,7 +19,6 @@ def app():
         os.makedirs(test_upload_dir)
 
     yield app
-
    
     if os.path.exists(test_upload_dir):
         shutil.rmtree(test_upload_dir)
